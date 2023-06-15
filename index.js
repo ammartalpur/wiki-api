@@ -23,14 +23,14 @@ const articleSchema = mongoose.Schema({
 const Article = mongoose.model("Article", articleSchema);
 
 
-
-
-
-
-
-
-
-
+app.get('/articles', (req, res) => {
+    Article.find({}).then((result) => {
+        res.send(result)
+    }).catch((err) => {
+        // console.log(err);
+        res.send(err)
+    });
+})
 
 
 
