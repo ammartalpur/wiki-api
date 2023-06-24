@@ -21,31 +21,42 @@ const articleSchema = mongoose.Schema({
 })
 
 const Article = mongoose.model("Article", articleSchema);
-
-
-app.route('/article').get((req, res) => {
-    Article.deleteMany().then((result) => {
-        res.send("All article deleted")
-    }).catch((err) => {
-        res.send(err)
-    });
-}).post((req, res) => {
-    const newArticle = new Article({
-        title: req.body.title,
-        content: req.body.content
-    });
-    newArticle.save().then((result) => {
-        res.send("Successfully added a new article")
-    }).catch((err) => {
-        res.send(err)
-    });
-}).delete((req, res) => {
-    Article.deleteMany().then((result) => {
-        res.send("All article deleted")
+// Get specific article
+app.route('/articles/:articleTitle').get((req, res) => {
+    Article.findOne({ title: req.params.articleTitle }).then((result) => {
+        res.send(result)
     }).catch((err) => {
         res.send(err)
     });
 })
+
+app.route('/articles')
+    .get((req, res) => {
+        Article.find({}).then((result) => {
+            res.send(result)
+        }).catch((err) => {
+            res.send("Failed to get articles from db")
+        });
+    })
+    .post((req, res) => {
+        const newArticle = new Article({
+            title: req.body.title,
+            content: req.body.content
+        });
+        newArticle.save().then((result) => {
+            res.send("Successfully added a new article")
+        }).catch((err) => {
+            res.send(err)
+        });
+    })
+    .delete((req, res) => {
+        Article.deleteMany().then((result) => {
+            res.send("All article deleted")
+        }).catch((err) => {
+            res.send(err)
+        });
+    })
+
 
 db.on('open', () => {
     console.log("Successfully connected to database!");
