@@ -23,16 +23,13 @@ const articleSchema = mongoose.Schema({
 const Article = mongoose.model("Article", articleSchema);
 
 
-app.get('/articles', (req, res) => {
-    Article.find({}).then((result) => {
-        res.send(result)
+app.route('/article').get((req, res) => {
+    Article.deleteMany().then((result) => {
+        res.send("All article deleted")
     }).catch((err) => {
-        // console.log(err);
         res.send(err)
     });
-})
-
-app.post('/articles', (req, res) => {
+}).post((req, res) => {
     const newArticle = new Article({
         title: req.body.title,
         content: req.body.content
@@ -42,8 +39,13 @@ app.post('/articles', (req, res) => {
     }).catch((err) => {
         res.send(err)
     });
+}).delete((req, res) => {
+    Article.deleteMany().then((result) => {
+        res.send("All article deleted")
+    }).catch((err) => {
+        res.send(err)
+    });
 })
-
 
 db.on('open', () => {
     console.log("Successfully connected to database!");
