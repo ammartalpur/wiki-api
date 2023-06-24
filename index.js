@@ -32,6 +32,17 @@ app.get('/articles', (req, res) => {
     });
 })
 
+app.post('/articles', (req, res) => {
+    const newArticle = new Article({
+        title: req.body.title,
+        content: req.body.content
+    });
+    newArticle.save().then((result) => {
+        res.send("Successfully added a new article")
+    }).catch((err) => {
+        res.send(err)
+    });
+})
 
 
 db.on('open', () => {
